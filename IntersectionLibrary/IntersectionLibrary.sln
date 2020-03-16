@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29905.134
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntersectionLibrary", "IntersectionLibrary\IntersectionLibrary.csproj", "{8EFA090B-5A46-4712-B7BD-BA23526EFF3E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntersectionLibrary", "IntersectionLibrary\IntersectionLibrary.csproj", "{8EFA090B-5A46-4712-B7BD-BA23526EFF3E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestIntersectionLibrary", "..\TestIntersectionLibrary\TestIntersectionLibrary.csproj", "{4224104E-5229-4FBE-9259-D5C20CD4467B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestIntersectionLibrary", "..\TestIntersectionLibrary\TestIntersectionLibrary.csproj", "{4224104E-5229-4FBE-9259-D5C20CD4467B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp", "..\ConsoleApp\ConsoleApp.csproj", "{0CEDF25A-EAFB-40C5-B0B3-6BA7FD81DD65}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,6 +33,14 @@ Global
 		{4224104E-5229-4FBE-9259-D5C20CD4467B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4224104E-5229-4FBE-9259-D5C20CD4467B}.Release|x64.ActiveCfg = Release|Any CPU
 		{4224104E-5229-4FBE-9259-D5C20CD4467B}.Release|x64.Build.0 = Release|Any CPU
+		{0CEDF25A-EAFB-40C5-B0B3-6BA7FD81DD65}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0CEDF25A-EAFB-40C5-B0B3-6BA7FD81DD65}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0CEDF25A-EAFB-40C5-B0B3-6BA7FD81DD65}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{0CEDF25A-EAFB-40C5-B0B3-6BA7FD81DD65}.Debug|x64.Build.0 = Debug|Any CPU
+		{0CEDF25A-EAFB-40C5-B0B3-6BA7FD81DD65}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0CEDF25A-EAFB-40C5-B0B3-6BA7FD81DD65}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0CEDF25A-EAFB-40C5-B0B3-6BA7FD81DD65}.Release|x64.ActiveCfg = Release|Any CPU
+		{0CEDF25A-EAFB-40C5-B0B3-6BA7FD81DD65}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
