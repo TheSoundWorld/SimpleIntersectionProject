@@ -1,0 +1,23 @@
+﻿<Page
+    x:Class="WindowsApp.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:WindowsApp"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid>
+        <CommandBar DefaultLabelPosition="Right">
+            <AppBarButton Icon="OpenFile" Label="OpenFile" Click="AppBarButton_Click_OpenFile"/>
+            <AppBarButton Icon="Add" Label="Add" Click="AppBarButton_Click_Add"/>
+            <AppBarButton Icon="Refresh" Label="ReFresh" Click="AppBarButton_Click_ReFresh">
+                <FlyoutBase.AttachedFlyout>
+                    <Flyout x:Name="flyout"></Flyout>
+                </FlyoutBase.AttachedFlyout>
+            </AppBarButton>
+        </CommandBar>
+        <Canvas x:Name="myCanvas" Margin="0,45,0,0"></Canvas>
+    </Grid>
+</Page>
