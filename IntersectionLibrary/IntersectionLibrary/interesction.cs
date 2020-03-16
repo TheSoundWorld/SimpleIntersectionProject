@@ -319,6 +319,7 @@ namespace IntersectionLibrary
 
     // The class has some useful function that CommandLine App and Windows app both use.
     // todo: the class need to be tested.
+    // todo: need to do exception handle.
     public static class Helper
     {
         // To parse input.
