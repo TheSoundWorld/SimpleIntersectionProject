@@ -13,9 +13,22 @@ namespace ConsoleApp
             // todo: need to parse commandline args.
             List<SimpleObject> simpleObjects = new List<SimpleObject>();
 
-            string text = File.ReadAllText("input.txt");
-            simpleObjects = Helper.Parse(text);
-            Console.WriteLine(Helper.Compute(simpleObjects).Count);
+            string inFile = args[2];
+            string outFile = args[4];
+            FileStream fs = new FileStream(outFile, FileMode.Create);
+            StreamWriter sw = new StreamWriter(fs);
+
+            string text = File.ReadAllText(inFile);
+            try
+            {
+                simpleObjects = Helper.Parse(text);
+
+                sw.Write(Helper.Compute(simpleObjects).Count);
+            }
+            catch (Exception) { };
+            sw.Flush();
+            sw.Close();
+            fs.Close();
         }
     }
 }

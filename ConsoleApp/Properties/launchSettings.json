@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ConsoleApp": {
+      "commandName": "Project",
+      "commandLineArgs": "intersect.exe -i input.txt -o output.txt"
+    }
+  }
+}

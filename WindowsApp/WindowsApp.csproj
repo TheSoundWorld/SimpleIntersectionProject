@@ -156,7 +156,7 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\IntersectionLibrary\IntersectionLibrary\IntersectionLibrary.csproj">
+    <ProjectReference Include="..\IntersectionLibrary\IntersectionLibrary.csproj">
       <Project>{8efa090b-5a46-4712-b7bd-ba23526eff3e}</Project>
       <Name>IntersectionLibrary</Name>
     </ProjectReference>

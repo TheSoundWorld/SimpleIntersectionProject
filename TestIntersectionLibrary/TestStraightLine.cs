@@ -5,14 +5,16 @@ using System.Linq;
 
 namespace NUnitTestProject1
 {
+    [TestFixture]
     public class TestStraightLine
     {
-        public StraightLine line;
+        public StraightLine test;
         public StraightLine straightLine;
         public RayLine rayLine1;
         public RayLine rayLine2;
         public LineSegment lineSegment;
         public Circle circle;
+        public StraightLine straightLine1;
 
 
         [SetUp]
@@ -23,7 +25,7 @@ namespace NUnitTestProject1
             args.Add(0);
             args.Add(1);
             args.Add(0);
-            line = new StraightLine(args);
+            test = new StraightLine(args);
 
             List<double> args1 = new List<double>();
             args1.Add(0);
@@ -58,12 +60,20 @@ namespace NUnitTestProject1
             args5.Add(1);
             args5.Add(1);
             circle = new Circle(args5);
+
+            List<double> args6 = new List<double>();
+            args6.Add(1);
+            args6.Add(1);
+            args6.Add(1);
+            args6.Add(2);
+            straightLine1 = new StraightLine(args6);
+
         }
 
         [Test]
         public void TestIntersectWithStraightLine()
         {
-            List<double> result = line.Intersect(straightLine);
+            List<double> result = test.Intersect(straightLine);
             List<double> answer = new List<double>();
             answer.Add(-1);
             answer.Add(0);
@@ -73,7 +83,7 @@ namespace NUnitTestProject1
         [Test]
         public void TestIntersectWithRayLineNoIntersection()
         {
-            List<double> result = line.Intersect(rayLine1);
+            List<double> result = test.Intersect(rayLine1);
             List<double> answer = new List<double>();
             Assert.IsTrue(Enumerable.SequenceEqual(result, answer));
         }
@@ -81,7 +91,7 @@ namespace NUnitTestProject1
         [Test]
         public void TestIntersectWithRayLine()
         {
-            List<double> result = line.Intersect(rayLine2);
+            List<double> result = test.Intersect(rayLine2);
             List<double> answer = new List<double>();
             answer.Add(-1);
             answer.Add(0);
@@ -91,7 +101,7 @@ namespace NUnitTestProject1
         [Test]
         public void TestIntersectWithLineSegmentNoIntersection()
         {
-            List<double> result = line.Intersect(lineSegment);
+            List<double> result = test.Intersect(lineSegment);
             List<double> answer = new List<double>();
             Assert.IsTrue(Enumerable.SequenceEqual(result, answer));
         }
@@ -99,10 +109,18 @@ namespace NUnitTestProject1
         [Test]
         public void TestIntersectWithCircle()
         {
-            List<double> result = line.Intersect(circle);
+            List<double> result = test.Intersect(circle);
             List<double> answer = new List<double>();
             answer.Add(0);
             answer.Add(0);
+            Assert.IsTrue(Enumerable.SequenceEqual(result, answer));
+        }
+        [Test]
+        public void TestIntersectWithStraightLine1()
+        {
+
+            List<double> result = test.Intersect(straightLine1);
+            List<double> answer = new List<double>();
             Assert.IsTrue(Enumerable.SequenceEqual(result, answer));
         }
     }

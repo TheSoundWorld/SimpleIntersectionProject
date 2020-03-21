@@ -44,6 +44,13 @@ namespace IntersectionLibrary
                 intersection.Add(px);
                 intersection.Add(py);
             }
+            else
+            {
+                if ((x1 - x3) * (y3 - y2) - (y1 - y3) * (x3 - x2) == 0)
+                {
+                    throw new IntersectionsInfiniteException();
+                }
+            }
 
             return intersection;
         }
@@ -107,6 +114,14 @@ namespace IntersectionLibrary
             double y2 = c2[1];
             double r2 = c2[2];
 
+            if (x1 == x2 && y1 == y2 && r1 == r2)
+            {
+                
+                    throw new IntersectionsInfiniteException();
+
+               
+            }
+
             double a = 2 * (x2 - x1);
             double b = 2 * (y2 - y1);
             double c = r1 * r1 - x1 * x1 - y1 * y1 - r2 * r2 + x2 * x2 + y2 * y2;
@@ -145,7 +160,7 @@ namespace IntersectionLibrary
 
         // Compute the dot between two vectors.
         // Point1(x1, x2), Point2(x3, x4), Vector1(Point1, Point2)
-        // Point3(x5, x6), Point2(x7, x8), Vector1(Point3, Point4)
+        // Point3(x5, x6), Point4(x7, x8), Vector1(Point3, Point4)
         public double Dot(double x1, double x2, double x3, double x4,
                           double x5, double x6, double x7, double x8)
         {
@@ -165,38 +180,43 @@ namespace IntersectionLibrary
 
         public override List<double> Intersect(SimpleObject obj)
         {
-            if (obj is StraightLine)
-            {
-                return LineLineIntersect(this.args, obj.args);
-            }
-            else if (obj is Circle)
-            {
-                return LineCircleIntersect(this.args, obj.args);
-            }
-            else if (obj is RayLine)
-            {
-                List<double> intersection = LineLineIntersect(this.args, obj.args);
-
-                // Need to check if the intersection points is on the ray line.
-                if (Dot(obj.args[0], obj.args[1], obj.args[2], obj.args[3],
-                        obj.args[0], obj.args[1], intersection[0], intersection[1]) < 0)
+            
+                if (obj is StraightLine)
                 {
-                    intersection.Clear();
+                    return LineLineIntersect(this.args, obj.args);
                 }
-                return intersection;
-            }
-            else
-            {
-                List<double> intersection = LineLineIntersect(this.args, obj.args);
-
-                // Need to check if the intersection points is on the line segment.
-                if (Dot(intersection[0], intersection[1], obj.args[0], obj.args[1],
-                        intersection[0], intersection[1], obj.args[2], obj.args[3]) > 0)
+                else if (obj is Circle)
                 {
-                    intersection.Clear();
+                    return LineCircleIntersect(this.args, obj.args);
                 }
-                return intersection;
-            }
+                else if (obj is RayLine)
+                {
+                    List<double> intersection = LineLineIntersect(this.args, obj.args);
+
+                    // Need to check if the intersection points is on the ray line.
+                    if (intersection.Count >= 2 &&
+                        Dot(obj.args[0], obj.args[1], obj.args[2], obj.args[3],
+                            obj.args[0], obj.args[1], intersection[0], intersection[1]) < 0)
+                    {
+                        intersection.Clear();
+                    }
+                    return intersection;
+                }
+                else
+                {
+                    List<double> intersection = LineLineIntersect(this.args, obj.args);
+
+                    // Need to check if the intersection points is on the line segment.
+                    if (intersection.Count >=2 && 
+                        Dot(intersection[0], intersection[1], obj.args[0], obj.args[1],
+                            intersection[0], intersection[1], obj.args[2], obj.args[3]) > 0)
+                    {
+                        intersection.Clear();
+                    }
+                    return intersection;
+                }
+           
+
         }
     }
 
@@ -208,45 +228,58 @@ namespace IntersectionLibrary
 
         public override List<double> Intersect(SimpleObject obj)
         {
-            if (obj is StraightLine)
-            {
-                return ((StraightLine)obj).Intersect(this);
-            }
-            else if (obj is RayLine)
-            {
-                List<double> intersection = LineLineIntersect(this.args, obj.args);
-                if (Dot(obj.args[0], obj.args[1], obj.args[2], obj.args[3],
-                        obj.args[0], obj.args[1], intersection[0], intersection[1]) < 0 ||
-                    Dot(this.args[0], this.args[1], this.args[2], this.args[3],
-                        this.args[0], this.args[1], intersection[0], intersection[1]) < 0)
+            
+                if (obj is StraightLine)
                 {
-                    intersection.Clear();
+                    return ((StraightLine)obj).Intersect(this);
                 }
-                return intersection;
-            }
-            else if (obj is LineSegment)
-            {
-                List<double> intersection = LineLineIntersect(this.args, obj.args);
-                if (Dot(intersection[0], intersection[1], obj.args[0], obj.args[1],
-                        intersection[0], intersection[1], obj.args[2], obj.args[3]) > 0 ||
-                    Dot(this.args[0], this.args[1], this.args[2], this.args[3],
-                        this.args[0], this.args[1], intersection[0], intersection[1]) < 0)
+                else if (obj is RayLine)
                 {
-                    intersection.Clear();
+                    List<double> intersection = LineLineIntersect(this.args, obj.args);
+                    if (intersection.Count >= 2 &&
+                        (Dot(obj.args[0], obj.args[1], obj.args[2], obj.args[3],
+                            obj.args[0], obj.args[1], intersection[0], intersection[1]) < 0 ||
+                        Dot(this.args[0], this.args[1], this.args[2], this.args[3],
+                            this.args[0], this.args[1], intersection[0], intersection[1]) < 0))
+                    {
+                        intersection.Clear();
+                    }
+                    return intersection;
                 }
-                return intersection;
-            }
-            else
-            {
-                List<double> intersection = LineCircleIntersect(this.args, obj.args);
-                while (intersection.Count >= 2 &&
-                    Dot(this.args[0], this.args[1], this.args[2], this.args[3],
-                        this.args[0], this.args[1], intersection[0], intersection[1]) < 0)
+                else if (obj is LineSegment)
                 {
-                    intersection.RemoveRange(0, 2);
+                    List<double> intersection = LineLineIntersect(this.args, obj.args);
+                    if (intersection.Count >= 2 &&
+                        (Dot(intersection[0], intersection[1], obj.args[0], obj.args[1],
+                            intersection[0], intersection[1], obj.args[2], obj.args[3]) > 0 ||
+                        Dot(this.args[0], this.args[1], this.args[2], this.args[3],
+                            this.args[0], this.args[1], intersection[0], intersection[1]) < 0))
+                    {
+                        intersection.Clear();
+                    }
+                    return intersection;
                 }
-                return intersection;
-            }
+                else
+                {
+                    List<double> intersection = LineCircleIntersect(this.args, obj.args);
+
+                    if (intersection.Count >= 4 &&
+                        Dot(this.args[0], this.args[1], this.args[2], this.args[3],
+                            this.args[0], this.args[1], intersection[2], intersection[3]) < 0)
+                    {
+                        intersection.RemoveRange(2, 2);
+                    }
+
+                    if (intersection.Count >= 2 &&
+                        Dot(this.args[0], this.args[1], this.args[2], this.args[3],
+                            this.args[0], this.args[1], intersection[0], intersection[1]) < 0)
+                    {
+                        intersection.RemoveRange(0, 2);
+                    }
+
+                    return intersection;
+                }
+           
         }
     }
 
@@ -257,37 +290,49 @@ namespace IntersectionLibrary
 
         public override List<double> Intersect(SimpleObject obj)
         {
-            if (obj is StraightLine)
-            {
-                return ((StraightLine)obj).Intersect(this);
-            }
-            else if (obj is RayLine)
-            {
-                return ((RayLine)obj).Intersect(this);
-            }
-            else if (obj is LineSegment)
-            {
-                List<double> intersection = LineLineIntersect(this.args, obj.args);
-                if (Dot(intersection[0], intersection[1], obj.args[0], obj.args[1],
-                        intersection[0], intersection[1], obj.args[2], obj.args[3]) > 0 ||
-                    Dot(intersection[0], intersection[1], this.args[0], this.args[1],
-                        intersection[0], intersection[1], this.args[2], this.args[3]) > 0)
+            
+                if (obj is StraightLine)
                 {
-                    intersection.Clear();
+                    return ((StraightLine)obj).Intersect(this);
                 }
-                return intersection;
-            }
-            else
-            {
-                List<double> intersection = LineCircleIntersect(this.args, obj.args);
-                while (intersection.Count >= 2 &&
-                    Dot(intersection[0], intersection[1], this.args[0], this.args[1],
-                        intersection[0], intersection[1], this.args[2], this.args[3]) > 0)
+                else if (obj is RayLine)
                 {
-                    intersection.RemoveRange(0, 2);
+                    return ((RayLine)obj).Intersect(this);
                 }
-                return intersection;
-            }
+                else if (obj is LineSegment)
+                {
+                    List<double> intersection = LineLineIntersect(this.args, obj.args);
+                    if (intersection.Count >= 2 &&
+                    (Dot(intersection[0], intersection[1], obj.args[0], obj.args[1],
+                            intersection[0], intersection[1], obj.args[2], obj.args[3]) > 0 ||
+                        Dot(intersection[0], intersection[1], this.args[0], this.args[1],
+                            intersection[0], intersection[1], this.args[2], this.args[3]) > 0))
+                    {
+                        intersection.Clear();
+                    }
+                    return intersection;
+                }
+                else
+                {
+                    List<double> intersection = LineCircleIntersect(this.args, obj.args);
+
+                    if (intersection.Count >= 4 &&
+                    Dot(intersection[2], intersection[3], this.args[0], this.args[1],
+                        intersection[2], intersection[3], this.args[2], this.args[3]) > 0)
+                    {
+                        intersection.RemoveRange(2, 2);
+                    }
+
+                    if (intersection.Count >= 2 &&
+                        Dot(intersection[0], intersection[1], this.args[0], this.args[1],
+                            intersection[0], intersection[1], this.args[2], this.args[3]) > 0)
+                    {
+                        intersection.RemoveRange(0, 2);
+                    }
+
+                    return intersection;
+                }
+            
         }
     }
 
@@ -298,22 +343,25 @@ namespace IntersectionLibrary
 
         public override List<double> Intersect(SimpleObject obj)
         {
-            if (obj is StraightLine)
-            {
-                return ((StraightLine)obj).Intersect(this);
-            }
-            else if (obj is RayLine)
-            {
-                return ((RayLine)obj).Intersect(this);
-            }
-            else if (obj is LineSegment)
-            {
-                return ((LineSegment)obj).Intersect(this);
-            }
-            else
-            {
-                return CircleCircleIntersect(this.args, obj.args);
-            }
+           
+                if (obj is StraightLine)
+                {
+                    return ((StraightLine)obj).Intersect(this);
+                }
+                else if (obj is RayLine)
+                {
+                    return ((RayLine)obj).Intersect(this);
+                }
+                else if (obj is LineSegment)
+                {
+                    return ((LineSegment)obj).Intersect(this);
+                }
+                else
+                {
+                    return CircleCircleIntersect(this.args, obj.args);
+
+                }
+            
         }
     }
 
@@ -331,7 +379,10 @@ namespace IntersectionLibrary
             List<SimpleObject> objects = new List<SimpleObject>();
             for (int i = 1; i < lines.Length; i++)
             {
-                objects.Add(ParseLine(lines[i]));
+                
+                    objects.Add(ParseLine(lines[i]));
+               
+
             }
             return objects;
         }
@@ -349,6 +400,15 @@ namespace IntersectionLibrary
                 int x2 = int.Parse(tokens[2]);
                 int x3 = int.Parse(tokens[3]);
                 int x4 = int.Parse(tokens[4]);
+                if(x1<=-100000||x1>=100000|| x2 <= -100000 || x2 >= 100000 ||
+                    x3 <= -100000 || x3 >= 100000 || x4 <= -100000 || x4 >= 100000 )
+                {
+                    throw new CoordinateRangeException();
+                }
+                if (x1 == x3 && x2 == x4)
+                {
+                    throw new PointCoincidentException();
+                }
                 List<double> args = new List<double>();
                 args.Add(x1);
                 args.Add(x2);
@@ -362,6 +422,16 @@ namespace IntersectionLibrary
                 int x2 = int.Parse(tokens[2]);
                 int x3 = int.Parse(tokens[3]);
                 int x4 = int.Parse(tokens[4]);
+                if (x1 <= -100000 || x1 >= 100000 || x2 <= -100000 || x2 >= 100000 ||
+                     x3 <= -100000 || x3 >= 100000 || x4 <= -100000 || x4 >= 100000)
+                {
+                    throw new CoordinateRangeException();
+                }
+                if (x1 == x3 && x2 == x4)
+                {
+                    throw new PointCoincidentException();
+                }
+
                 List<double> args = new List<double>();
                 args.Add(x1);
                 args.Add(x2);
@@ -375,6 +445,17 @@ namespace IntersectionLibrary
                 int x2 = int.Parse(tokens[2]);
                 int x3 = int.Parse(tokens[3]);
                 int x4 = int.Parse(tokens[4]);
+
+                if (x1 <= -100000 || x1 >= 100000 || x2 <= -100000 || x2 >= 100000 ||
+                    x3 <= -100000 || x3 >= 100000 || x4 <= -100000 || x4 >= 100000)
+                {
+                    throw new CoordinateRangeException();
+                }
+                if (x1 == x3 && x2 == x4)
+                {
+                    throw new PointCoincidentException();
+                }
+
                 List<double> args = new List<double>();
                 args.Add(x1);
                 args.Add(x2);
@@ -382,21 +463,35 @@ namespace IntersectionLibrary
                 args.Add(x4);
                 return new IntersectionLibrary.LineSegment(args);
             }
-            else
+            else if(tokens[0]=="C")
             {
                 int x1 = int.Parse(tokens[1]);
                 int x2 = int.Parse(tokens[2]);
                 int x3 = int.Parse(tokens[3]);
+                if (x1 <= -100000 || x1 >= 100000 || x2 <= -100000 || x2 >= 100000 )
+                    
+                {
+                    throw new CoordinateRangeException();
+                }
+                if (x3 <= 0 || x3 >= 100000)
+                {
+                    throw new RadiusIllegalException();
+                }
+
                 List<double> args = new List<double>();
                 args.Add(x1);
                 args.Add(x2);
                 args.Add(x3);
                 return new Circle(args);
             }
+            else
+            {
+                throw new TypeException();
+            }
         }
 
         // This is a simple List<double> comparator.
-        class SequenceComparer<T> : IEqualityComparer<IEnumerable<T>>
+         class SequenceComparer<T> : IEqualityComparer<IEnumerable<T>>
         {
             public bool Equals(IEnumerable<T> seq1, IEnumerable<T> seq2)
             {
